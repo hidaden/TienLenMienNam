@@ -11,7 +11,7 @@ public record Card(Rank rank, Suit suit) implements Comparable<Card> {
 		}
 		return this.suit.compareTo(other.suit);
 	}
-	
+
 	@Override
 	public String toString() {
 		// Vi du: "3S" cho 3 Bich', "KC" cho K chuon`

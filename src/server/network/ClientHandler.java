@@ -18,11 +18,11 @@ public class ClientHandler implements Runnable {
 	private final GameServer server;
 	private PrintWriter write;
 	private BufferedReader reader;
-	
+
 	private String playerName;
 	private GameRoom currentRoom;
 	private List<Card> hand;
-	
+
 	public ClientHandler(Socket socket, GameServer server) {
 		this.clientSocket = socket;
 		this.server = server;
@@ -34,18 +34,18 @@ public class ClientHandler implements Runnable {
 		try {
 			this.reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			this.write = new PrintWriter(clientSocket.getOutputStream(), true);
-			
+
 			String clientMessage;
 			while (((clientMessage = reader.readLine()) != null)) {
 				System.out.println("Received from " + playerName + ": " + clientMessage);
-				
+
 				if (currentRoom != null && currentRoom.getState() == GameState.PLAYING) {
 					currentRoom.processPlayerMove(this, clientMessage);
 				} else {
 					handleLobbyCommand(clientMessage);
 				}
 			}
-			
+
 		} catch (IOException e) {
 			// TODO: handle exception
 		} finally {
@@ -55,64 +55,73 @@ public class ClientHandler implements Runnable {
 			server.removeClient(this);
 			try {
 				clientSocket.close();
-			} catch (IOException e2) {}
+			} catch (IOException e2) {
+			}
 		}
 	}
-	
+
 	private void handleLobbyCommand(String message) {
-		String [] parts = message.split("\\" + Protocol.SEPARATOR, 2);
+		String[] parts = message.split("\\" + Protocol.SEPARATOR, 2);
 		String command = parts[0];
 		String payload = parts.length > 1 ? parts[1] : "";
-		
+
 		switch (command) {
 		case Protocol.C_SET_NAME:
 			if (!payload.isEmpty()) {
 				this.setPlayerName(payload);
-				System.out.println("Client " + clientSocket.getInetAddress().getHostAddress() + " set name to: " + this.playerName);
+				System.out.println("Client " + clientSocket.getInetAddress().getHostAddress() + " set name to: "
+						+ this.playerName);
 				sendMessage(Protocol.S_MSG + Protocol.SEPARATOR + "Welcome, " + this.playerName + "!");
 			} else {
 				sendMessage(Protocol.S_ERROR + Protocol.SEPARATOR + "Name cannot be empty.");
 			}
 			break;
-		
+
 		case Protocol.C_CREATE_ROOM:
 			server.createRoom(this);
 			break;
-			
+
 		case Protocol.C_JOIN_ROOM:
 			if (payload.isEmpty()) {
-				server.joinRoom(this, payload);
-			} else {
 				sendMessage(Protocol.S_ERROR + Protocol.SEPARATOR + "Room ID is required");
+			} else {
+				server.joinRoom(this, payload);
 			}
 			break;
-			
+		case Protocol.C_START_GAME:
+			if (currentRoom != null) {
+				currentRoom.startGame();
+			} else {
+				sendMessage(Protocol.S_ERROR + Protocol.SEPARATOR + "Bạn chưa ở trong phòng nào");
+			}
+			break;
+
 		default:
 			sendMessage(Protocol.S_ERROR + Protocol.SEPARATOR + "Unknown comman in lobby: " + command);
 			break;
 		}
 	}
-	
+
 	public void setHand(List<Card> hand) {
 		this.hand = new ArrayList<>(hand);
 	}
-	
+
 	public void removeCardsFromHand(List<Card> cardsToRemove) {
 		this.hand.removeAll(cardsToRemove);
 	}
-	
+
 	public void sendMessage(String message) {
 		write.println(message);
 	}
-	
+
 	public String getPlayerName() {
 		return playerName;
 	}
-	
+
 	public void setPlayerName(String name) {
 		this.playerName = name;
 	}
-	
+
 	public void setCurrentRoom(GameRoom room) {
 		this.currentRoom = room;
 	}
@@ -120,6 +129,5 @@ public class ClientHandler implements Runnable {
 	public List<Card> getHand() {
 		return hand;
 	}
-	
-	
+
 }

@@ -12,6 +12,8 @@ public class Protocol {
 	public static final String C_PASS = "PASS";
 	public static final String C_CHAT = "CHAT"; 
 	public static final String C_LIST_ROOMS = "LIST_ROOMS"; 
+	public static final String C_START_GAME = "START_GAME";
+
 
 	// Lệnh từ Server gửi xuống Client (S2C)
 	public static final String S_MSG = "MSG";

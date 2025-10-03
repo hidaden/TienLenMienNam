@@ -14,19 +14,19 @@ public enum Rank {
 	KING(13, "K"),
 	ACE(14, "A"),
 	TWO(15, "2");
-	
+
 	private final int value;
 	private final String displayName;
-	
+
 	Rank(int value, String displayName) {
 		this.value = value;
 		this.displayName = displayName;
 	}
-	
+
 	public int getValue() {
 		return value;
 	}
-	
+
 	public String getDisplayName() {
 		return displayName;
 	}
