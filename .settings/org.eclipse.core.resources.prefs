@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+encoding//src/client/CardUtils.java=UTF-8
+encoding//src/client/ClientApp.java=UTF-8
+encoding//src/client/Player.java=UTF-8
+encoding//src/server/core/Deck.java=UTF-8
+encoding//src/server/network/ClientHandler.java=UTF-8
