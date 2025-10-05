@@ -80,40 +80,40 @@ public class Player {
 	 *
 	 * Trả về danh sách Card đã chọn (không xoá khỏi hand ở đây).
 	 */
-	public List<Card> chooseCardsFromConsole(Scanner scanner) {
-		showHand();
-		System.out.println("Nhập các lá muốn đánh (ví dụ: 3S 4C 5D) hoặc chỉ số (1 3 5). Gõ PASS để bỏ lượt.");
-		System.out.print("> ");
-		String line = scanner.nextLine().trim();
-		if (line.equalsIgnoreCase("PASS") || line.isEmpty()) {
-			return new ArrayList<>();
-		}
-		List<Card> chosen = new ArrayList<>();
-		String[] tokens = line.split("\s+");
-		for (String t : tokens) {
-			if (t.matches("\\d+")) {
-				int idx = Integer.parseInt(t);
-				synchronized (hand) {
-					if (idx >= 1 && idx <= hand.size()) {
-						chosen.add(hand.get(idx - 1));
-					} else {
-						System.out.println("Chỉ số không hợp lệ: " + t);
-					}
-				}
-			} else {
-				Card parsed = CardUtils.parseCard(t);
-				if (parsed == null) {
-					System.out.println("Không nhận diện được lá bài: " + t);
-				} else {
-					synchronized (hand) {
-						if (hand.contains(parsed))
-							chosen.add(parsed);
-						else
-							System.out.println("Bạn không có lá bài: " + parsed);
-					}
-				}
-			}
-		}
-		return chosen;
-	}
+//	public List<Card> chooseCardsFromConsole(Scanner scanner) {
+//		showHand();
+//		System.out.println("Nhập các lá muốn đánh (ví dụ: 3S 4C 5D) hoặc chỉ số (1 3 5). Gõ PASS để bỏ lượt.");
+//		System.out.print("> ");
+//		String line = scanner.nextLine().trim();
+//		if (line.equalsIgnoreCase("PASS") || line.isEmpty()) {
+//			return new ArrayList<>();
+//		}
+//		List<Card> chosen = new ArrayList<>();
+//		String[] tokens = line.split("\s+");
+//		for (String t : tokens) {
+//			if (t.matches("\\d+")) {
+//				int idx = Integer.parseInt(t);
+//				synchronized (hand) {
+//					if (idx >= 1 && idx <= hand.size()) {
+//						chosen.add(hand.get(idx - 1));
+//					} else {
+//						System.out.println("Chỉ số không hợp lệ: " + t);
+//					}
+//				}
+//			} else {
+//				Card parsed = CardUtils.parseCard(t);
+//				if (parsed == null) {
+//					System.out.println("Không nhận diện được lá bài: " + t);
+//				} else {
+//					synchronized (hand) {
+//						if (hand.contains(parsed))
+//							chosen.add(parsed);
+//						else
+//							System.out.println("Bạn không có lá bài: " + parsed);
+//					}
+//				}
+//			}
+//		}
+//		return chosen;
+//	}
 }
